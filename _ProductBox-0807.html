@@ -1,0 +1,38 @@
+<tamppa:config:ProductBox />
+
+<div class="prod-img">
+    <a class="caption-link center-block" ng-href="{{pro.url}}">
+        <img width="100%" alt="{{pro.name}}" class="img-responsive center-block" ng-src="{{pro.main && pro.main.url_mini || pro.image}}" />
+    	<img width="100%" alt="{{pro.name}}" class="img-responsive center-block img-hover" ng-src="{{pro.cover && pro.cover.url_mini || pro.main.url_mini}}" />
+    </a>
+    <div ng-if="pro.variations" class="caption-area-variation">
+        <input type="hidden" name="attribute" ng-value="pro.attribute" />
+        <input type="hidden" name="sku" ng-value="pro.sku" />
+        <input type="hidden" name="stock" ng-value="pro.stock" />
+        <input type="hidden" name="price" ng-value="pro.price" />
+        <input type="hidden" name="discount" ng-value="pro.discount" />
+        <ul class="caption-variations" ng-repeat="type in gettypeattrs(pro.variations)">
+            <li class="caption-title">{{type.name}}</li>
+            <li ng-repeat="attr in getattrs(type.id, pro) | orderBy: 'position'">
+                <label ng-click="selectattr(pro, $event)" data-id="{{attr.id}}" data-type="{{type.id}}" style="{{attrbackground(attr.color)}}" class="attribute-button">{{type.has_color && ' ' || attr.name}}</label>
+            </li>
+        </ul>
+    </div>
+</div>
+<span class="prod-new" ng-if="pro.is_new">@Resources.New</span>
+<div class="prod-name">
+    <a class="caption-link center-block" ng-href="{{pro.url}}">
+        <h2>{{pro.name}}</h2>
+    </a>
+</div>
+<section ng-if="pro.sku" class="prod-price-section">
+    <span ng-if="pro.discount > 0" class="prod-price-old">De: {{pro.price | currency:"R$ "}}</span>
+    <span ng-if="pro.discount > 0" class="prod-price">Por: {{pro.discount | currency:"R$ "}}</span>
+    <span ng-if="pro.discount == 0" class="prod-price">{{pro.price | currency:"R$ "}}</span>
+	<div class="installment">
+    	<p ng-if="pro.installment.plots > 1">Ou {{pro.installment.plots}}x de {{pro.installment.value | currency:"@Resources.Currency "}} {{pro.installment.message}}</p>
+	</div>
+</section>
+<button type="button" class="add-to-cart" ng-click="buy(pro, $event)">
+    @Resources.AddToCart
+</button>
